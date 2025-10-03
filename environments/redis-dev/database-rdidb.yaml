@@ -1,0 +1,23 @@
+#
+
+name: "rdidb"
+password: ""
+cluster: "redis-enterprise-cluster"
+memory: "256MB"
+replication: true
+shards: 1
+placement: dense
+port: 12001
+eviction: noeviction
+ossCluster: false
+proxyPolicy: all-master-shards
+persistence: aofEverySecond
+modules:
+  - ReJSON
+  - search
+  - timeseries
+ingress:
+  type: "lb"
+tls:
+  enabled: false
+  certificates: []

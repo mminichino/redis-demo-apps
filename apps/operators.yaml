@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: redis-operator
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/mminichino/redis-demo-apps.git
+              revision: HEAD
+              files:
+                - path: "environments/*/operator.yaml"
+          - list:
+              elements: []
+
+  template:
+    metadata:
+      name: '{{namespace}}-operator'
+      annotations:
+        argocd.argoproj.io/sync-wave: "0"
+    spec:
+      project: redis-apps
+      sources:
+        - repoURL: https://helm.redis.io
+          targetRevision: 7.22.0-17
+          path: charts/redis-enterprise-operator
+          helm:
+            valueFiles:
+              - $values/environments/{{namespace}}/operator.yaml
+        - repoURL: https://github.com/mminichino/redis-demo-apps.git
+          targetRevision: HEAD
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

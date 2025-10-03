@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: redis-cluster
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/mminichino/redis-demo-apps.git
+              revision: HEAD
+              files:
+                - path: "environments/*/cluster.yaml"
+          - list:
+              elements: []
+
+  template:
+    metadata:
+      name: '{{namespace}}-cluster'
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
+    spec:
+      project: redis-apps
+      sources:
+        - repoURL: https://github.com/mminichino/helm-charts.git
+          targetRevision: HEAD
+          path: charts/redis-cluster
+          helm:
+            valueFiles:
+              - $values/environments/{{namespace}}/cluster.yaml
+        - repoURL: https://github.com/mminichino/redis-demo-apps.git
+          targetRevision: HEAD
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
