@@ -6,8 +6,8 @@ license: ""
 
 node:
   count: 3
-  cpu: "4"
-  memory: "8Gi"
+  cpu: "2"
+  memory: "4Gi"
   disk: "32Gi"
 
 ingress:
