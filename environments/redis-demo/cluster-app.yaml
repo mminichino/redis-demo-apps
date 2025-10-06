@@ -5,19 +5,13 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/mminichino/redis-demo-apps.git
-              revision: main
-              files:
-                - path: "environments/*/cluster.yaml"
-          - list:
-              elements: []
+    - list:
+        elements:
+          - environment: redis-demo
 
   template:
     metadata:
-      name: '{{namespace}}-cluster'
+      name: '{{environment}}-cluster'
       annotations:
         argocd.argoproj.io/sync-wave: "1"
     spec:
@@ -25,16 +19,16 @@ spec:
       sources:
         - repoURL: https://github.com/mminichino/helm-charts.git
           targetRevision: 0.1.12
-          path: charts/redis-cluster
+          chart: redis-cluster
           helm:
             valueFiles:
-              - $values/environments/{{namespace}}/cluster.yaml
+              - $values/environments/{{environment}}/cluster.yaml
         - repoURL: https://github.com/mminichino/redis-demo-apps.git
           targetRevision: main
           ref: values
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: '{{environment}}'
       syncPolicy:
         automated:
           prune: true

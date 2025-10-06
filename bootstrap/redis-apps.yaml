@@ -20,7 +20,7 @@ spec:
       source:
         repoURL: https://github.com/mminichino/redis-demo-apps.git
         targetRevision: main
-        path: apps
+        path: environments/{{environment}}
         directory:
           recurse: true
       destination:

@@ -5,17 +5,15 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/mminichino/redis-demo-apps.git
-              revision: main
-              files:
-                - path: "environments/*/database-*.yaml"
+    - git:
+        repoURL: https://github.com/mminichino/redis-demo-apps.git
+        revision: main
+        files:
+          - path: "environments/redis-test/database-*.yaml"
 
   template:
     metadata:
-      name: 'database-{{name}}'
+      name: 'redis-test-{{name}}'
       annotations:
         argocd.argoproj.io/sync-wave: "2"
     spec:
@@ -23,22 +21,20 @@ spec:
       sources:
         - repoURL: https://github.com/mminichino/helm-charts.git
           targetRevision: 0.1.2
-          path: charts/redis-database
+          chart: redis-database
           helm:
             valueFiles:
-              - $values/environments/{{namespace}}/database-{{name}}.yaml
+              - $values/environments/redis-test/database-{{name}}.yaml
         - repoURL: https://github.com/mminichino/redis-demo-apps.git
           targetRevision: main
           ref: values
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: 'redis-test'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
-        syncPolicy:
-          syncOptions:
-            - RespectIgnoreDifferences=true
+          - RespectIgnoreDifferences=true
