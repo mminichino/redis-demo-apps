@@ -9,7 +9,7 @@ spec:
         generators:
           - git:
               repoURL: https://github.com/mminichino/redis-demo-apps.git
-              revision: HEAD
+              revision: main
               files:
                 - path: "environments/*/database-*.yaml"
 
@@ -22,13 +22,13 @@ spec:
       project: redis-apps
       sources:
         - repoURL: https://github.com/mminichino/helm-charts.git
-          targetRevision: HEAD
+          targetRevision: 0.1.2
           path: charts/redis-database
           helm:
             valueFiles:
               - $values/environments/{{namespace}}/database-{{name}}.yaml
         - repoURL: https://github.com/mminichino/redis-demo-apps.git
-          targetRevision: HEAD
+          targetRevision: main
           ref: values
       destination:
         server: https://kubernetes.default.svc

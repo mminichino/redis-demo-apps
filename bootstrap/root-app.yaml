@@ -1,4 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: redis-apps
+  namespace: argocd
+spec:
+  description: Redis Demo Apps
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: redis-apps
@@ -9,7 +25,7 @@ spec:
   project: redis-apps
   source:
     repoURL: https://github.com/mminichino/redis-demo-apps.git
-    targetRevision: HEAD
+    targetRevision: main
     path: apps
   destination:
     server: https://kubernetes.default.svc

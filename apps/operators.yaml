@@ -9,7 +9,7 @@ spec:
         generators:
           - git:
               repoURL: https://github.com/mminichino/redis-demo-apps.git
-              revision: HEAD
+              revision: main
               files:
                 - path: "environments/*/operator.yaml"
           - list:
@@ -30,7 +30,7 @@ spec:
             valueFiles:
               - $values/environments/{{namespace}}/operator.yaml
         - repoURL: https://github.com/mminichino/redis-demo-apps.git
-          targetRevision: HEAD
+          targetRevision: main
           ref: values
       destination:
         server: https://kubernetes.default.svc
