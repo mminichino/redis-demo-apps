@@ -20,9 +20,10 @@ spec:
       source:
         repoURL: https://github.com/mminichino/redis-demo-apps.git
         targetRevision: main
-        path: environments/{{environment}}
-        directory:
-          recurse: true
+        path: charts/redis-apps
+        helm:
+          valueFiles:
+            - ../../environments/{{environment}}/values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: argocd

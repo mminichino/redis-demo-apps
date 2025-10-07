@@ -1,0 +1,59 @@
+{{- range .Values.databases }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $.Release.Namespace }}-{{ .name }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: {{ $.Values.project }}
+  sources:
+    - repoURL: https://mminichino.github.io/helm-charts
+      targetRevision: {{ $.Values.database.chart.version }}
+      chart: redis-database
+      helm:
+        values: |
+          name: {{ .name }}
+          password: {{ .password }}
+          cluster: "{{ $.Release.Namespace }}-cluster"
+          memory: {{ .memory }}
+          replication: {{ .replication }}
+          shards: {{ .shards }}
+          placement: {{ .placement }}
+          port: {{ .port }}
+          eviction: {{ .eviction }}
+          ossCluster: {{ .ossCluster }}
+          proxyPolicy: {{ .proxyPolicy }}
+          persistence: {{ .persistence }}
+          {{- if .modules }}
+          modules:
+            {{- range .modules }}
+            - {{ . }}
+            {{- end }}
+          {{- end }}
+          ingress:
+            type: {{ .ingress.type }}
+          tls:
+            enabled: {{ .tls.enabled }}
+            {{- if .tls.certificates }}
+            certificates:
+              {{- range .tls.certificates }}
+              - {{ . }}
+              {{- end }}
+            {{- else }}
+            certificates: []
+            {{- end }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ $.Release.Namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+{{- end }}

@@ -11,11 +11,11 @@ spec:
   project: redis-apps
   sources:
     - repoURL: https://helm.redis.io
-      targetRevision: 7.22.0-17
+      targetRevision: {{ .Values.operator.version }}
       chart: redis-enterprise-operator
   destination:
     server: https://kubernetes.default.svc
-    namespace: 'redis-demo'
+    namespace: {{ .Release.Namespace }}
   syncPolicy:
     automated:
       prune: true

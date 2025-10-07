@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Release.Namespace }}-cluster
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: {{ .Values.project }}
+  sources:
+    - repoURL: https://mminichino.github.io/helm-charts
+      targetRevision: {{ .Values.cluster.chart.version }}
+      chart: redis-cluster
+      helm:
+        values: |
+          name: "{{ .Release.Namespace }}-cluster"
+          license: {{ .Values.cluster.values.license }}
+          node:
+            count: {{ .Values.cluster.values.node.count }}
+            cpu: {{ .Values.cluster.values.node.cpu | quote }}
+            memory: {{ .Values.cluster.values.node.memory }}
+            disk: {{ .Values.cluster.values.node.disk }}
+          ingress:
+            enabled: {{ .Values.cluster.values.ingress.enabled }}
+            type: {{ .Values.cluster.values.ingress.type }}
+          storage:
+            class: {{ .Values.cluster.values.storage.class }}
+          dns:
+            domain: {{ .Values.cluster.values.dns.domain }}
+          tls:
+            name: {{ .Values.cluster.values.tls.name }}
+            certificate: {{ .Values.cluster.values.tls.certificate }}
+            key: {{ .Values.cluster.values.tls.key }}
+            secret: {{ .Values.cluster.values.tls.secret }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Release.Namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

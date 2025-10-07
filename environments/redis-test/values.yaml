@@ -1,0 +1,75 @@
+project: redis-apps
+
+cluster:
+  chart:
+    version: 0.1.14
+  values:
+    license: ""
+    node:
+      count: 3
+      cpu: "2"
+      memory: 4Gi
+      disk: 32Gi
+    ingress:
+      enabled: false
+      type: "nginx"
+    storage:
+      class: "premium-rwo"
+    dns:
+      domain: ""
+    tls:
+      name: "proxy"
+      certificate: ""
+      key: ""
+      secret: ""
+
+database:
+  chart:
+    version: 0.1.3
+
+databases:
+  - name: "redb"
+    password: ""
+    cluster: "redis-enterprise-cluster"
+    memory: "1GB"
+    replication: true
+    shards: 1
+    placement: dense
+    port: 12000
+    eviction: noeviction
+    ossCluster: false
+    proxyPolicy: all-master-shards
+    persistence: aofEverySecond
+    modules:
+      - ReJSON
+      - search
+      - timeseries
+    ingress:
+      type: "none"
+    tls:
+      enabled: false
+      certificates: []
+  - name: "rdidb"
+    password: ""
+    cluster: "redis-enterprise-cluster"
+    memory: "256MB"
+    replication: true
+    shards: 1
+    placement: dense
+    port: 12001
+    eviction: noeviction
+    ossCluster: false
+    proxyPolicy: all-master-shards
+    persistence: aofEverySecond
+    modules:
+      - ReJSON
+      - search
+      - timeseries
+    ingress:
+      type: "none"
+    tls:
+      enabled: false
+      certificates: []
+
+operator:
+  version: 7.22.0-17
