@@ -19,7 +19,7 @@ spec:
           license: ""
           node:
             count: 3
-            cpu: 2
+            cpu: '2'
             memory: 4Gi
             disk: 32Gi
           ingress:
