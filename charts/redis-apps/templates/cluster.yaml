@@ -29,7 +29,7 @@ spec:
           storage:
             class: {{ .Values.cluster.values.storage.class }}
           dns:
-            domain: {{ $domain }}
+            domain: {{ $domain | quote }}
           tls:
             name: {{ .Values.cluster.values.tls.name }}
             certificate: {{ .Values.cluster.values.tls.certificate }}
