@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Release.Namespace }}-cluster
+  name: {{ .Values.namespace }}-cluster
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -15,7 +15,7 @@ spec:
       chart: redis-cluster
       helm:
         values: |
-          name: "{{ .Release.Namespace }}-cluster"
+          name: "{{ .Values.namespace }}-cluster"
           license: {{ .Values.cluster.values.license }}
           node:
             count: {{ .Values.cluster.values.node.count }}
@@ -36,7 +36,7 @@ spec:
             secret: {{ .Values.cluster.values.tls.secret }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ .Values.namespace }}
   syncPolicy:
     automated:
       prune: true

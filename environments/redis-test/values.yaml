@@ -1,5 +1,3 @@
-project: redis-apps
-
 cluster:
   chart:
     version: 0.1.14

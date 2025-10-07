@@ -24,6 +24,13 @@ spec:
         helm:
           valueFiles:
             - ../../environments/{{environment}}/values.yaml
+          parameters:
+            - name: project
+              value: redis-apps
+            - name: environment
+              value: '{{environment}}'
+            - name: namespace
+              value: '{{environment}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: argocd
