@@ -11,7 +11,7 @@ spec:
   project: redis-apps
   sources:
     - repoURL: https://mminichino.github.io/helm-charts
-      targetRevision: 0.1.12
+      targetRevision: 0.1.13
       chart: redis-cluster
       helm:
         values: |
