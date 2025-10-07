@@ -19,9 +19,9 @@ spec:
           license: ""
           node:
             count: 3
-            cpu: "2"
-            memory: "4Gi"
-            disk: "32Gi"
+            cpu: 2
+            memory: 4Gi
+            disk: 32Gi
           ingress:
             enabled: false
             type: "lb"
