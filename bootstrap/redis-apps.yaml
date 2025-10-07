@@ -36,8 +36,6 @@ spec:
               value: '{{environment}}'
             - name: namespace
               value: '{{environment}}'
-            - name: cluster.values.dns.domain
-              value: '$argocd-secret:cluster-settings:domain'
       destination:
         server: https://kubernetes.default.svc
         namespace: argocd
