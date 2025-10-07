@@ -166,3 +166,6 @@ cython_debug/
 .config/
 tests/output/
 test/
+
+# Secret values
+secrets.yaml

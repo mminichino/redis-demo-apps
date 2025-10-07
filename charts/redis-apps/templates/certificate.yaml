@@ -1,0 +1,28 @@
+{{- $domain := include "redis-apps.domain" . }}
+{{- if $domain }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.namespace }}-tls
+  namespace: {{ .Values.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  secretName: {{ .Values.namespace }}-tls
+  issuerRef:
+    name: self-signed-issuer
+    kind: Issuer
+  subject:
+    organizations:
+      - RedisLabs
+    countries:
+      - US
+  dnsNames:
+    - "*.{{ $domain }}"
+  keystores:
+    pkcs12:
+      create: true
+      passwordSecretRef:
+        name: {{ .Values.namespace }}-keystore
+        key: password
+{{- end }}

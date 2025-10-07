@@ -1,3 +1,4 @@
+{{- $domain := include "redis-apps.domain" . }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -28,12 +29,16 @@ spec:
           storage:
             class: {{ .Values.cluster.values.storage.class }}
           dns:
-            domain: {{ .Values.cluster.values.dns.domain }}
+            domain: {{ $domain }}
           tls:
             name: {{ .Values.cluster.values.tls.name }}
             certificate: {{ .Values.cluster.values.tls.certificate }}
             key: {{ .Values.cluster.values.tls.key }}
+            {{- if $domain }}
+            secret: {{ .Values.namespace }}-tls
+            {{- else }}
             secret: {{ .Values.cluster.values.tls.secret }}
+            {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.namespace }}
