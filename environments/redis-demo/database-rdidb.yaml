@@ -1,23 +1,48 @@
-#
-
-name: "rdidb"
-password: ""
-cluster: "redis-enterprise-cluster"
-memory: "256MB"
-replication: true
-shards: 1
-placement: dense
-port: 12001
-eviction: noeviction
-ossCluster: false
-proxyPolicy: all-master-shards
-persistence: aofEverySecond
-modules:
-  - ReJSON
-  - search
-  - timeseries
-ingress:
-  type: "lb"
-tls:
-  enabled: false
-  certificates: []
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-demo-rdidb
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: redis-apps
+  sources:
+    - repoURL: https://github.com/mminichino/helm-charts.git
+      targetRevision: 0.1.2
+      chart: redis-database
+      helm:
+        values: |
+          name: "rdidb"
+          password: ""
+          cluster: "redis-demo-cluster"
+          memory: "256MB"
+          replication: true
+          shards: 1
+          placement: dense
+          port: 12001
+          eviction: noeviction
+          ossCluster: false
+          proxyPolicy: all-master-shards
+          persistence: aofEverySecond
+          modules:
+            - ReJSON
+            - search
+            - timeseries
+          ingress:
+            type: "lb"
+          tls:
+            enabled: false
+            certificates: []
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: 'redis-demo'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true

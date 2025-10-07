@@ -1,23 +1,48 @@
-#
-
-name: "redb"
-password: ""
-cluster: "redis-enterprise-cluster"
-memory: "1GB"
-replication: true
-shards: 1
-placement: dense
-port: 12000
-eviction: noeviction
-ossCluster: false
-proxyPolicy: all-master-shards
-persistence: aofEverySecond
-modules:
-  - ReJSON
-  - search
-  - timeseries
-ingress:
-  type: "lb"
-tls:
-  enabled: false
-  certificates: []
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-test-redb
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: redis-apps
+  sources:
+    - repoURL: https://github.com/mminichino/helm-charts.git
+      targetRevision: 0.1.2
+      chart: redis-database
+      helm:
+        values: |
+          name: "redb"
+          password: ""
+          cluster: "redis-test-cluster"
+          memory: "1GB"
+          replication: true
+          shards: 1
+          placement: dense
+          port: 12000
+          eviction: noeviction
+          ossCluster: false
+          proxyPolicy: all-master-shards
+          persistence: aofEverySecond
+          modules:
+            - ReJSON
+            - search
+            - timeseries
+          ingress:
+            type: "lb"
+          tls:
+            enabled: false
+            certificates: []
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: 'redis-test'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
