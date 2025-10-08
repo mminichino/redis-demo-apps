@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-demo
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: redis-demo
+spec:
+  project: redis-apps
+  source:
+    repoURL: https://github.com/mminichino/redis-demo-apps.git
+    targetRevision: main
+    path: charts/redis-apps
+    helm:
+      valueFiles:
+        - ../../environments/redis-demo/values.yaml
+      parameters:
+        - name: project
+          value: redis-apps
+        - name: environment
+          value: redis-demo
+        - name: namespace
+          value: redis-demo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: true
+    syncOptions:
+      - CreateNamespace=true
