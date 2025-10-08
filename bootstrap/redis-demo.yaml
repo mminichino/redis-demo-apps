@@ -25,7 +25,7 @@ spec:
           value: redis-demo
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: redis-demo
   syncPolicy:
     automated:
       prune: true
