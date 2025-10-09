@@ -1,6 +1,7 @@
 project: redis-apps
 environment: redis
 namespace: redis
+monitoring: false
 
 cluster:
   chart:
