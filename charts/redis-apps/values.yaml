@@ -5,7 +5,7 @@ monitoring: false
 
 cluster:
   chart:
-    version: 0.1.17
+    version: 0.1.18
   values:
     license: ""
     node:
@@ -75,4 +75,5 @@ databases:
       certificates: []
 
 operator:
-  version: 7.22.2-22
+  version: 8.0.2-2
+  redisVersion: 8.0.2-17

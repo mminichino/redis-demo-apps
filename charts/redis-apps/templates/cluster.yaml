@@ -18,6 +18,7 @@ spec:
         values: |
           name: "{{ .Values.namespace }}-cluster"
           license: {{ .Values.cluster.values.license | quote }}
+          version: {{ .Values.operator.redisVersion | quote }}
           node:
             count: {{ .Values.cluster.values.node.count }}
             cpu: {{ .Values.cluster.values.node.cpu | quote }}
