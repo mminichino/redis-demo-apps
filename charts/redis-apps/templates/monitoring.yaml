@@ -15,6 +15,12 @@ spec:
       scheme: https
       tlsConfig:
         insecureSkipVerify: true
+    - interval: 15s
+      port: prometheus
+      scheme: https
+      path: /v2
+      tlsConfig:
+        insecureSkipVerify: true
   namespaceSelector:
     matchNames:
       - {{ .Values.namespace }}
