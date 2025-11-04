@@ -47,6 +47,10 @@ spec:
             {{- else }}
             certificates: []
             {{- end }}
+          {{- if .dns.domain }}
+          dns:
+            domain: {{ .dns.domain | quote }}
+          {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ $.Values.namespace }}

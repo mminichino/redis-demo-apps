@@ -52,6 +52,8 @@ databases:
     tls:
       enabled: false
       certificates: []
+    dns:
+      domain: ""
   - name: "rdidb"
     password: ""
     cluster: "redis-enterprise-cluster"
@@ -73,6 +75,8 @@ databases:
     tls:
       enabled: false
       certificates: []
+    dns:
+      domain: ""
 
 operator:
   version: 8.0.2-2
