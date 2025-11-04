@@ -18,6 +18,7 @@ spec:
       helm:
         values: |
           name: {{ .name }}
+          namespace: {{ $.Values.namespace | quote }}
           password: {{ .password }}
           cluster: "{{ $.Values.namespace }}-cluster"
           memory: {{ .memory }}

@@ -17,6 +17,7 @@ spec:
       helm:
         values: |
           name: "{{ .Values.namespace }}-cluster"
+          namespace: {{ .Values.namespace | quote }}
           license: {{ .Values.cluster.values.license | quote }}
           version: {{ .Values.operator.redisVersion | quote }}
           node:
