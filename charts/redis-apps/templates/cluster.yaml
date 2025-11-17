@@ -36,11 +36,7 @@ spec:
             name: {{ .Values.cluster.values.tls.name }}
             certificate: {{ .Values.cluster.values.tls.certificate }}
             key: {{ .Values.cluster.values.tls.key }}
-            {{- if $domain }}
-            secret: {{ .Values.namespace }}-tls
-            {{- else }}
             secret: {{ .Values.cluster.values.tls.secret }}
-            {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.namespace }}
