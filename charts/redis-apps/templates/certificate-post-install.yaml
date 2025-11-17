@@ -1,0 +1,41 @@
+{{- $domain := include "redis-apps.domain" . }}
+{{- if $domain }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "certificate-post-install-job"
+  namespace: {{ .Values.namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: redis-enterprise-operator
+      restartPolicy: Never
+      containers:
+        - name: post-install-job
+          image: mminichino/kubectl:latest
+          command: ["/bin/bash"]
+          args:
+            - "-c"
+            - |
+              set -e
+
+              NS="{{ .Values.namespace }}"
+              CERT="${NS}-tls"
+              PROXY_CERT="proxy-cert-tls"
+
+              if kubectl get secret "$PROXY_CERT" --namespace "$NS" &> /dev/null; then
+                echo "Secret already exists. Exiting."
+                exit 0
+              fi
+
+              kubectl create secret generic "$PROXY_CERT" \
+              --from-literal=certificate="$(kubectl get secret $CERT -n $NS -o jsonpath='{.data.tls\.crt}' | base64 -d)" \
+              --from-literal=key="$(kubectl get secret $CERT -n $NS -o jsonpath='{.data.tls\.key}' | base64 -d)" \
+              --from-literal=name=proxy \
+              --namespace "$NS"
+{{- end }}
