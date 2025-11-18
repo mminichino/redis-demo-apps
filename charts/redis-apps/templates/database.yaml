@@ -33,7 +33,7 @@ spec:
           proxyPolicy: {{ .proxyPolicy | default "all-master-shards" }}
           persistence: {{ .persistence | default "aofEverySecond" }}
           version: {{ .version | default "latest" }}
-          {{- if .ossExporter.enabled }}
+          {{- if and .ossExporter .ossExporter.enabled }}
           ossExporter:
             enabled: {{ .ossExporter.enabled }}
             image: {{ .ossExporter.image | default "codelry/redis-exporter" }}
@@ -61,7 +61,7 @@ spec:
           dns:
             domain: {{ .dns.domain | quote }}
           {{- end }}
-          {{- if .externalSecret.enabled }}
+          {{- if and .externalSecret .externalSecret.enabled }}
           externalSecret:
             enabled: {{ .externalSecret.enabled }}
             store:
