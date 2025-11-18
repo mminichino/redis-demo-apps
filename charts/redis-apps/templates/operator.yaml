@@ -16,6 +16,18 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.namespace }}
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: admission-tls
+      namespace: {{ .Values.namespace }}
+      jsonPointers:
+        - /data
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: "redis-enterprise-admission-{{ .Values.namespace }}"
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
   syncPolicy:
     automated:
       prune: true
@@ -23,3 +35,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
