@@ -28,7 +28,7 @@ cluster:
 
 database:
   chart:
-    version: 0.1.12
+    version: 0.1.13
 
 databases:
   - name: "redb"
