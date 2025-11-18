@@ -19,17 +19,26 @@ spec:
         values: |
           name: {{ .name }}
           namespace: {{ $.Values.namespace | quote }}
-          password: {{ .password }}
+          username: {{ .username | default "default" }}
+          password: {{ .password | default "" }}
+          passwordSecret: {{ .passwordSecret | default "" }}
           cluster: "{{ $.Values.namespace }}-cluster"
-          memory: {{ .memory }}
-          replication: {{ .replication }}
-          shards: {{ .shards }}
-          placement: {{ .placement }}
-          port: {{ .port }}
-          eviction: {{ .eviction }}
-          ossCluster: {{ .ossCluster }}
-          proxyPolicy: {{ .proxyPolicy }}
-          persistence: {{ .persistence }}
+          memory: {{ .memory | default "1GB" }}
+          replication: {{ .replication | default true }}
+          shards: {{ .shards | default 1 }}
+          placement: {{ .placement | default "sparse" }}
+          port: {{ .port | default 12000 }}
+          eviction: {{ .eviction | default "noeviction" }}
+          ossCluster: {{ .ossCluster | default false }}
+          proxyPolicy: {{ .proxyPolicy | default "all-master-shards" }}
+          persistence: {{ .persistence | default "aofEverySecond" }}
+          version: {{ .version | default "latest" }}
+          {{- if .ossExporter.enabled }}
+          ossExporter:
+            enabled: {{ .ossExporter.enabled }}
+            image: {{ .ossExporter.image | default "codelry/redis-exporter" }}
+            version: {{ .ossExporter.version | default "v1.79.0" }}
+          {{- end }}
           {{- if .modules }}
           modules:
             {{- range .modules }}
@@ -52,6 +61,14 @@ spec:
           dns:
             domain: {{ .dns.domain | quote }}
           {{- end }}
+          {{- if .externalSecret.enabled }}
+          externalSecret:
+            enabled: {{ .externalSecret.enabled }}
+            store:
+              kind: {{ .externalSecret.store.kind | default "ClusterSecretStore" }}
+              name: {{ .externalSecret.store.name }}
+            key: {{ .externalSecret.key }}
+          {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ $.Values.namespace }}
@@ -61,6 +78,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - RespectIgnoreDifferences=true
       - ServerSideApply=true
 {{- end }}

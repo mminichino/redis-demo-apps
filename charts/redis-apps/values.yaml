@@ -5,7 +5,7 @@ monitoring: false
 
 cluster:
   chart:
-    version: 0.1.18
+    version: 0.1.22
   values:
     license: ""
     node:
@@ -28,21 +28,28 @@ cluster:
 
 database:
   chart:
-    version: 0.1.4
+    version: 0.1.12
 
 databases:
   - name: "redb"
+    username: "default"
     password: ""
+    passwordSecret: ""
     cluster: "redis-enterprise-cluster"
     memory: "1GB"
     replication: true
     shards: 1
-    placement: dense
+    placement: sparse
     port: 12000
     eviction: noeviction
     ossCluster: false
     proxyPolicy: all-master-shards
     persistence: aofEverySecond
+    version: "latest"
+    ossExporter:
+      enabled: false
+      image: "codelry/redis-exporter"
+      version: "v1.79.0"
     modules:
       - ReJSON
       - search
@@ -54,18 +61,30 @@ databases:
       certificates: []
     dns:
       domain: ""
+    externalSecret:
+      enabled: false
+      store:
+        kind: ClusterSecretStore
+        name: ""
+      key: ""
   - name: "rdidb"
     password: ""
+    passwordSecret: ""
     cluster: "redis-enterprise-cluster"
     memory: "256MB"
     replication: true
     shards: 1
-    placement: dense
+    placement: sparse
     port: 12001
     eviction: noeviction
     ossCluster: false
     proxyPolicy: all-master-shards
     persistence: aofEverySecond
+    version: "latest"
+    ossExporter:
+      enabled: false
+      image: "codelry/redis-exporter"
+      version: "v1.79.0"
     modules:
       - ReJSON
       - search
@@ -77,6 +96,12 @@ databases:
       certificates: []
     dns:
       domain: ""
+    externalSecret:
+      enabled: false
+      store:
+        kind: ClusterSecretStore
+        name: ""
+      key: ""
 
 operator:
   version: 8.0.2-2
