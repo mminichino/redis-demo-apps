@@ -5,7 +5,7 @@ monitoring: false
 
 cluster:
   chart:
-    version: 0.1.22
+    version: 0.1.23
   values:
     license: ""
     node:
@@ -25,6 +25,12 @@ cluster:
       certificate: ""
       key: ""
       secret: ""
+    externalSecret:
+      enabled: false
+      store:
+        kind: ClusterSecretStore
+        name: ""
+      key: ""
 
 database:
   chart:

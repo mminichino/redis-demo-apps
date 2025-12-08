@@ -37,6 +37,12 @@ spec:
             certificate: {{ .Values.cluster.values.tls.certificate }}
             key: {{ .Values.cluster.values.tls.key }}
             secret: {{ .Values.cluster.values.tls.secret }}
+          externalSecret:
+            enabled: {{ .Values.cluster.values.externalSecret.enabled }}
+            store:
+              kind: {{ .Values.cluster.values.externalSecret.store.kind }}
+              name: {{ .Values.cluster.values.externalSecret.store.name }}
+            key: {{ .Values.cluster.values.externalSecret.key }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.namespace }}
