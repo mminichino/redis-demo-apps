@@ -33,16 +33,9 @@ spec:
           dns:
             domain: {{ $domain | quote }}
           tls:
-            name: {{ .Values.cluster.values.tls.name }}
-{{- if .Values.cluster.values.tls.certificate }}
-            certificate: |
-{{ .Values.cluster.values.tls.certificate | indent 14 }}
-{{- end }}
-{{- if .Values.cluster.values.tls.key }}
-            key: |
-{{ .Values.cluster.values.tls.key | indent 14 }}
-{{- end }}
-            secret: {{ .Values.cluster.values.tls.secret }}
+          {{- toYaml .Values.cluster.values.tls | nindent 12 }}
+          syncer:
+          {{- toYaml .Values.cluster.values.syncer | nindent 12 }}
           externalSecret:
             enabled: {{ .Values.cluster.values.externalSecret.enabled }}
             store:
