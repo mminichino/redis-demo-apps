@@ -5,9 +5,10 @@ monitoring: false
 
 cluster:
   chart:
-    version: 0.1.25
+    version: 0.1.27
   values:
     license: ""
+    username: "demo@redis.com"
     node:
       count: 3
       cpu: "4"
