@@ -20,7 +20,6 @@ spec:
           namespace: {{ .Values.namespace | quote }}
           license: {{ .Values.cluster.values.license | quote }}
           username: {{ .Values.cluster.values.username | quote }}
-          version: {{ .Values.operator.redisVersion | quote }}
           node:
             count: {{ .Values.cluster.values.node.count }}
             cpu: {{ .Values.cluster.values.node.cpu | quote }}

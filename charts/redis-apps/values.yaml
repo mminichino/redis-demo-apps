@@ -5,7 +5,7 @@ monitoring: false
 
 cluster:
   chart:
-    version: 0.1.27
+    version: 0.2.0
   values:
     license: ""
     username: "demo@redis.com"
@@ -113,7 +113,3 @@ databases:
         kind: ClusterSecretStore
         name: ""
       key: ""
-
-operator:
-  version: 8.0.2-2
-  redisVersion: 8.0.2-17
