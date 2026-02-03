@@ -78,6 +78,14 @@ spec:
       jsonPointers:
         - /status/refreshTime
         - /status/syncedResourceVersion
+    - group: ""
+      kind: Secret
+      jsonPointers:
+        - /data/password
+    - group: "*"
+      kind: "*"
+      jsonPointers:
+        - /metadata/annotations
   syncPolicy:
     automated:
       prune: true
