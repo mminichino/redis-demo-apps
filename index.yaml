@@ -3,6 +3,16 @@ entries:
   redis-apps:
   - apiVersion: v2
     appVersion: 8.0.2
+    created: "2026-02-03T23:03:29.886238313Z"
+    description: Helm chart for ArgoCD Redis Software Stack
+    digest: 4fad904331aa2b6f3db0430e8b4fbb0acb6ad79d7c1bbe61905687faf7d02111
+    name: redis-apps
+    type: application
+    urls:
+    - https://github.com/mminichino/redis-demo-apps/releases/download/redis-apps-0.2.2/redis-apps-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 8.0.2
     created: "2025-12-23T22:35:21.30831296Z"
     description: Helm chart for ArgoCD Redis Software Stack
     digest: 963e396695f4d924b87bb3e5da8621176675b98a1bdca71925ff54232a0fa1f5
@@ -251,4 +261,4 @@ entries:
     urls:
     - https://github.com/mminichino/redis-demo-apps/releases/download/redis-apps-0.1.9/redis-apps-0.1.9.tgz
     version: 0.1.9
-generated: "2025-12-23T22:35:21.308514145Z"
+generated: "2026-02-03T23:03:29.886420693Z"
